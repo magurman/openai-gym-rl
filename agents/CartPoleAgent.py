@@ -9,8 +9,8 @@ from agents.AbstractQLearningAgent import AbstractQLearningAgent
 
 class CartPoleAgent(AbstractQLearningAgent):
 
-    def __init__(self, alphaStart = 0.05, alphaEnd = 0.05, epsilonStart = 1, epsilonEnd = 0.01, gamma = 0.95, numEpisodes = 5000, env='CartPole-v0', discretizeSize=[3,3,6,6]):
-        super(CartPoleAgent, self).__init__(alphaStart, alphaEnd, epsilonStart, epsilonEnd, gamma, numEpisodes, env)
+    def __init__(self, algorithm, alphaStart = 0.05, alphaEnd = 0.05, epsilonStart = 1, epsilonEnd = 0.01, gamma = 0.95, numEpisodes = 5000, env='CartPole-v0', discretizeSize=[3,3,6,6]):
+        super(CartPoleAgent, self).__init__(algorithm, alphaStart, alphaEnd, epsilonStart, epsilonEnd, gamma, numEpisodes, env)
 
         self.discretizeSize = discretizeSize
 
@@ -209,7 +209,7 @@ class CartPoleAgent(AbstractQLearningAgent):
 
 #         return tuple(discretized)
 
-if __name__ == "__main__":
-    agent = CartPoleAgent()
-    agent.train()
+# if __name__ == "__main__":
+#     agent = CartPoleAgent()
+#     agent.train()
 

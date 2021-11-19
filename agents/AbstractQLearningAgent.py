@@ -4,11 +4,12 @@ import collections
 import math
 import random
 import numpy as np
+from algorithms import Algorithm
 
 class AbstractQLearningAgent(ABC):
 
     @abstractmethod
-    def __init__(self, alphaStart, alphaEnd, epsilonStart , epsilonEnd, gamma, numEpisodes, env):
+    def __init__(self, algorithm, alphaStart, alphaEnd, epsilonStart , epsilonEnd, gamma, numEpisodes, env):
         self.env = gym.make(env)
 
         self.numEpisodes = numEpisodes
@@ -28,6 +29,7 @@ class AbstractQLearningAgent(ABC):
 
         self.data = []
 
+        self.algorithm = algorithm
 
     def getQValue(self, state, action):
         key = self.getQTableKey(state, action)
@@ -35,13 +37,17 @@ class AbstractQLearningAgent(ABC):
 
     def updateQTable(self, state, action, reward, nextState, episodeNum):
         currentAlpha = max(self.alphaStart - episodeNum * (self.alphaStart - self.alphaEnd) / self.annealingTime, self.alphaEnd) # guard against decay going below end value
-
         key = self.getQTableKey(state, action)
-        self.qTable[key] += (currentAlpha * 
-                                        (reward 
-                                         + self.gamma * np.max(self.computeValueFromQValues(nextState)) 
-                                         - self.qTable[key]))
-    
+
+        if self.algorithm == Algorithm.QLEARNING:
+            self.qTable[key] += (currentAlpha * 
+                                            (reward + self.gamma * self.computeValueFromQValues(nextState) - self.qTable[key]))
+        elif self.algorithm == Algorithm.SARSA:
+            nextAction = self.getActionToTake(nextState, episodeNum)
+            nextStateKey = self.getQTableKey(nextState, nextAction)
+
+            self.qTable[key] += (currentAlpha * (reward + self.gamma * (self.qTable[nextStateKey] - self.qTable[key])))
+            
     def getActionToTake(self, state, episodeNum):
         r = random.random()
 
