@@ -121,6 +121,9 @@ class AbstractQLearningAgent(ABC):
     def getData(self):
         return self.data
 
+    def getName(self):
+        return self.env.unwrapped.spec.id + "-" + self.algorithm.value
+
     @abstractmethod
     def getQTableKey(self, state, action):
         pass
@@ -135,8 +138,4 @@ class AbstractQLearningAgent(ABC):
 
     @abstractmethod
     def train(self):
-        pass
-
-    @abstractmethod
-    def getName(self):
         pass
