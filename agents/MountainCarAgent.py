@@ -62,8 +62,8 @@ class MountainCarAgent(AbstractQLearningAgent):
         print("Num episodes: ", self.numEpisodes)
         print("Num wins: ", self.wins)
 
-    def getName(self):
-        return "MountainCarAgent"
+    # def getName(self):
+    #     return "MountainCarAgent"
 # class MountainCarAgent:
 
 #     def __init__(self, alpha = .1, epsilonStart = .15, gamma = 0.95, numEpisodes = 5000, discretizeSize = [1,2]):

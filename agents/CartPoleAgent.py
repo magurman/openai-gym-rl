@@ -75,8 +75,8 @@ class CartPoleAgent(AbstractQLearningAgent):
         print("Num episodes: ", self.numEpisodes)
         print("Num wins: ", self.wins)
 
-    def getName(self):
-        return "CartPoleAgent"
+    # def getName(self):
+    #     return "CartPoleAgent"
 
 # class CartPoleAgent:
 
