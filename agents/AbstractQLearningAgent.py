@@ -4,6 +4,7 @@ import collections
 import math
 import random
 import numpy as np
+import csv 
 from algorithms import Algorithm
 
 class AbstractQLearningAgent(ABC):
@@ -28,8 +29,11 @@ class AbstractQLearningAgent(ABC):
         self.totalReward = 0
 
         self.data = []
+        self.colNames = ["ep", "reward", "win"]
 
         self.algorithm = algorithm
+
+        self.filename = self.getName() + ".csv"
 
     def getQValue(self, state, action):
         key = self.getQTableKey(state, action)
@@ -123,6 +127,13 @@ class AbstractQLearningAgent(ABC):
 
     def getName(self):
         return self.env.unwrapped.spec.id + "-" + self.algorithm.value
+
+    def writeDataToFile(self, filename, colNames, data):
+        with open(filename, mode="w") as file:
+            writer = csv.writer(file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(colNames)
+            for row in data:
+                writer.writerow([row[0], row[1], row[2]])
 
     @abstractmethod
     def getQTableKey(self, state, action):

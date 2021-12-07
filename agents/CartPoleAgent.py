@@ -75,6 +75,8 @@ class CartPoleAgent(AbstractQLearningAgent):
         print("Num episodes: ", self.numEpisodes)
         print("Num wins: ", self.wins)
 
+        self.writeDataToFile(self.filename, self.colNames, self.data)
+
     # def getName(self):
     #     return "CartPoleAgent"
 
