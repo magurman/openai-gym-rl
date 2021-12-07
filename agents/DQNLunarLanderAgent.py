@@ -91,9 +91,7 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         return steps, totalReward, newState
 
     def getModel(self, env):
-        '''
-        COPIED
-        '''
+
         model = keras.Sequential()
         model.add(keras.Input(shape=env.observation_space.shape))
         model.add(Dense(64, activation='relu'))
@@ -103,16 +101,10 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         model.summary()
         return model
     
-    '''
-    COPIED
-    '''
     def update_target(self):
         # print("Updated target. current epsilon:", self.epsilon)
         self.model_target.set_weights(self.model.get_weights())
 
-    '''
-    COPIED
-    '''
 
     def observe(self, state, action, reward, next_state, done, timesteps, episodeNum):
         # store transition (state, action, reward, next_state, done) in replay memory D
@@ -133,9 +125,6 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         if timesteps % 10000 == 0:
             print("\n epsilon", self.epsilon, "timesteps", timesteps)
 
-    '''
-    COPIED
-    '''
     def replay(self):
         # Sample random minibatch of transitions from replay memory D
 
