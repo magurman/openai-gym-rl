@@ -10,7 +10,7 @@ from algorithms import Algorithm
 class AbstractQLearningAgent(ABC):
 
     @abstractmethod
-    def __init__(self, algorithm, alphaStart, alphaEnd, epsilonStart , epsilonEnd, gamma, numEpisodes, env):
+    def __init__(self, algorithm, alphaStart, alphaEnd, epsilonStart , epsilonEnd, gamma, annealingTime, numEpisodes, env):
         self.env = gym.make(env)
 
         self.numEpisodes = numEpisodes
@@ -22,7 +22,7 @@ class AbstractQLearningAgent(ABC):
 
         self.gamma = gamma # discount factor
         
-        self.annealingTime = self.numEpisodes / 8 # num episodes for decay to occur 
+        self.annealingTime = annealingTime # num episodes for decay to occur 
         self.qTable = collections.defaultdict(int)
 
         self. wins = 0
@@ -33,7 +33,7 @@ class AbstractQLearningAgent(ABC):
 
         self.algorithm = algorithm
 
-        self.filename = self.getName() + ".csv"
+        self.filename = self.getName()
 
     def getQValue(self, state, action):
         key = self.getQTableKey(state, action)
@@ -99,19 +99,19 @@ class AbstractQLearningAgent(ABC):
         self.data = []
 
     def setEpsilonStart(self, epsilonStart):
-        this.epsilonStart = epsilonStart
+        self.epsilonStart = epsilonStart
 
     def setEpsilonEnd(self, epsilonEnd):
-        this.epsilonEnd = epsilonEnd
+        self.epsilonEnd = epsilonEnd
 
     def setAlphaStart(self, alphaStart):
-        this.alphaStart = alphaStart
+        self.alphaStart = alphaStart
 
     def setAlphaEnd(self, alphaEnd):
-        this.alphaEnd = alphaEnd
+        self.alphaEnd = alphaEnd
 
     def setGamma(self, gamma):
-        this.gamma = gamma 
+        self.gamma = gamma 
 
     def setAnnealingTime(self, annealingTime):
         self.annealingTime = annealingTime
@@ -122,11 +122,23 @@ class AbstractQLearningAgent(ABC):
     def setNumEpisodes(self, numEpisodes):
         self.numEpisodes = numEpisodes
 
+    def setAnnealingTime(self, annealingTime):
+        self.annealingTime = annealingTime
+
     def getData(self):
         return self.data
 
     def getName(self):
         return self.env.unwrapped.spec.id + "-" + self.algorithm.value
+
+    def getEpsilonStart(self):
+        return self.epsilonStart
+
+    def getGamma(self):
+        return self.gamma
+
+    def getAnnealingTime(self):
+        return self.annealingTime
 
     def writeDataToFile(self, filename, colNames, data):
         with open(filename, mode="w") as file:

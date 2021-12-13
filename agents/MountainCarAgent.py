@@ -8,8 +8,8 @@ import statistics
 from agents.AbstractQLearningAgent import AbstractQLearningAgent
 
 class MountainCarAgent(AbstractQLearningAgent):
-    def __init__(self, algorithm, alphaStart = 0.1, alphaEnd = 0.1, epsilonStart = 0.15, epsilonEnd = 0.01, gamma = 0.95, numEpisodes = 5000, env='MountainCar-v0', discretizeSize=[1,2]):
-        super(MountainCarAgent, self).__init__(algorithm, alphaStart, alphaEnd, epsilonStart, epsilonEnd, gamma, numEpisodes, env)
+    def __init__(self, algorithm, alphaStart = 0.1, alphaEnd = 0.1, epsilonStart = 1, epsilonEnd = 0.01, gamma = 0.95, annealingTime=5000/8, numEpisodes = 5000, env='MountainCar-v0', discretizeSize=[1,2]):
+        super(MountainCarAgent, self).__init__(algorithm, alphaStart, alphaEnd, epsilonStart, epsilonEnd, gamma, annealingTime, numEpisodes, env)
 
         self.discretizeSize = discretizeSize
 
