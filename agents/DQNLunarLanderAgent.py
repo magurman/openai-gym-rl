@@ -12,10 +12,10 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
     replay_start_size = 1000
     replay_memory_size = 1000000
     target_update_steps = 2000
-    batch_size = 32
+    batch_size = 100
     use_double_dqn = True
 
-    def __init__(self, algorithm, alphaStart = 0.001, alphaEnd = 0.001, epsilonStart = 0.15, epsilonEnd = 0.1, gamma = 0.99, numEpisodes = 5000, env='LunarLander-v2'):
+    def __init__(self, algorithm, alphaStart = 0.01, alphaEnd = 0.001, epsilonStart = 1, epsilonEnd = 0.1, gamma = 0.99, numEpisodes = 5000, env='LunarLander-v2'):
         super(DQNLunarLanderAgent, self).__init__(algorithm, alphaStart, alphaEnd, epsilonStart, epsilonEnd, gamma, numEpisodes, env)
 
         self.model = self.getModel(self.env)
@@ -28,7 +28,6 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
             metrics=['accuracy']
         )
 
-    
         self.targetModel = self.getModel(self.env)
 
         self.targetModel.set_weights(self.model.get_weights())
@@ -39,7 +38,7 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         r = random.random()
 
         currentEpsilon = max(self.epsilonStart - episodeNum * (self.epsilonStart - self.epsilonEnd) / self.annealingTime, self.epsilonEnd) # guard against decay going below end value
-
+        # currentEpsilon = self.epsilonStart - episodeNum * self.epsilonDecay
         if currentEpsilon > r:
             return self.env.action_space.sample()
         else:
@@ -50,7 +49,7 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
 
     def train(self):
         for ep in range(self.numEpisodes):
-            if ep % 50 == 0:
+            if ep % 10 == 0:
                 print("episode number: ", ep)
             win = False
 
@@ -64,9 +63,6 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
             episodeData = (ep, reward, win) # edit 
             self.data.append(episodeData)
 
-            if ep == 1000:
-                break
-
         self.writeDataToFile(self.filename, self.colNames, self.data)
 
     def runEpisode(self, episodeNum):
@@ -75,10 +71,6 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         state = self.env.reset()
         totalReward = 0
         while not done:
-
-            # if episodeNum > 600:
-            #     self.env.render()
-
             steps += 1
             action = self.getActionToTake(state, episodeNum)
             obs, reward, done, _ = self.env.step(action)
@@ -96,7 +88,6 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
         model.add(keras.Input(shape=env.observation_space.shape))
         model.add(Dense(64, activation='relu'))
         model.add(Dense(64, activation='relu'))
-        # model.add(Dense(32, activation='relu'))
         model.add(Dense(env.action_space.n, activation='linear'))
         model.summary()
         return model
@@ -124,6 +115,14 @@ class DQNLunarLanderAgent(AbstractQLearningAgent):
             self.update_target()
         if timesteps % 10000 == 0:
             print("\n epsilon", self.epsilon, "timesteps", timesteps)
+
+    '''
+        taking all actions and rewards (replay buffer)
+
+        training the model to predict rewards from action-state pairs
+
+        input to model is state, trying to learn outputs for actions
+    '''
 
     def replay(self):
         # Sample random minibatch of transitions from replay memory D
