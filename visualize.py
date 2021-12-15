@@ -26,6 +26,7 @@ def plotAndSave(data, xlabel, ylabel, title, location, show, xticks=None, yticks
     plt.savefig(location)
     if show:
         plt.show()
+    plt.clf()
 
 def plotAll(env, metric, analysis, show):
 
@@ -103,10 +104,10 @@ def main():
     for env in envs:
         for metric in metrics:
             for anal in analysis:
-                # print("Plotting:")
-                # print(env)
-                # print(metric)
-                # print(anal)
+                print("Plotting:")
+                print(env)
+                print(metric)
+                print(anal)
                 plotAll(env, metric, anal, show=False)
 
 main()
